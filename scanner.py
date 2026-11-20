@@ -1,23 +1,18 @@
-import socket  #grabs pythons networking toolbox
+import socket  # Python's built-in networking library
 
-#check doors/ports wtv u wana call it lol
+# Ask for a target and define the ports to check
 target = input("Enter IP to scan: ")
-ports = [22, 80, 443, 8000]
+ports = [22, 80, 443, 8000]  # SSH, HTTP, HTTPS, common dev server port
 
-# created a loop to run , to KNOCK on every door boiii
+# Try to connect to each port and report whether it's open
 for port in ports:
-    scanner_app_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # scanner app door open
-    scanner_app_socket.settimeout(0.5) #knock for .5 seconds
-    result = scanner_app_socket.connect_ex((target, port))
-    if result == 0:     #0 = the door opened, any other number it didnt open.         # == means "is this equal to"      #if target door answered/door is open
-        print(f"[OPEN]  Port {port}")
+    scanner_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # IPv4 TCP socket
+    scanner_socket.settimeout(0.5)  # Wait at most half a second per port
+    result = scanner_socket.connect_ex((target, port))  # Returns 0 if the connection succeeds
+    if result == 0:
+        print(f"[OPEN]   Port {port}")
     else:
         print(f"[closed] Port {port}")
-    scanner_app_socket.close() # scanner app door closed
+    scanner_socket.close()  # Close the connection before the next port
 
-#Stage 2: Find every device on my network, really meaning subnet. x.x.x.x
-
-
-
-
-
+# Stage 2: discover every device on the local subnet
